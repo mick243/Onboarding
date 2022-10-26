@@ -6,9 +6,9 @@ function problem3(number) {
   });
   const game365 = (end) => {
       let clap = 0;
-      const regex365 = /3|6|9/;
+      const trap365 = /3|6|9/;
       for (let i = 1; i <= end; i++) {
-          if (regex365.test(i)) clap++;
+          if (trap365.test(i)) clap++;
       }
       return clap;
   };
