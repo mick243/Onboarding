@@ -1,8 +1,8 @@
- const readline = require("readline");
-  const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
+const readline = require("readline");
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
     const problem6 = (money) => {
     const coins = [50000, 10000, 5000, 1000, 500, 100, 50, 10, 1];
 
@@ -27,4 +27,4 @@
       rl.close();
       }).on("close", function() {
       process.exit();
-      });
+     });
