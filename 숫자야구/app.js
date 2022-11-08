@@ -1,25 +1,55 @@
-const MissionUtils = require("@woowacourse/mission-utils");
+const { Console } = require("@woowacourse/mission-utils");
+const MESSAGE = require("./assets/Message");
+const Computer = require("./components/Computer");
+const Game = require("./components/Game");
 
 class App {
-  /* 랜덤 숫자 추출 */
-  pickRandomNumbers() {
-    const numbers = [];
-    while (numbers.length < 3) {
-      const number = MissionUtils.Random.pickNumberInRange(1, 9);
-      if (!numbers.includes(number)) numbers.push(number);
-    }
-
-    return numbers;
+  constructor() {
+    this.computer = new Computer();
+    this.game = new Game();
+    this.answer = null;
   }
 
-  /* 게임 플레이 */
   play() {
-    const numbers = this.pickRandomNumbers();
-    // console.log(numbers);
+    Console.print(MESSAGE.START);
+    this.start();
+  }
+
+  start() {
+    this.answer = this.computer.makeAnswer();
+    this.enter();
+  }
+
+  enter() {
+    Console.readLine(MESSAGE.ENTER, (input) => this.judge(input));
+  }
+
+  judge(input) {
+    const isValidInput = this.game.validateInput(input);
+    if (!isValidInput) return this.error();
+
+    const { ballCnt, strikeCnt } = this.game.judgeAnswer(input, this.answer);
+    this.game.announceResult(ballCnt, strikeCnt);
+
+    strikeCnt === 3 ? this.finish() : this.enter();
+  }
+
+  finish() {
+    Console.print(MESSAGE.FINISH);
+    Console.readLine(`${MESSAGE.RESTART}\n`, (input) => {
+      if (input === "1") this.start();
+      else if (input == "2") this.exit();
+      else this.error();
+    });
+  }
+
+  exit() {
+    Console.close();
+  }
+
+  error() {
+    throw new Error(MESSAGE.ERROR);
   }
 }
-
-const app = new App();
-app.play();
 
 module.exports = App;
